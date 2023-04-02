@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <title>DelTrak</title>
+</head>
+
+<body>
+  <div id="status"></div>
+  <table id="coordsRecord" class="w3-table w3-striped w3-border">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
+      </tr>
+    </thead>
+    <tbody id="coordsRecordBody"></tbody>
+  </table>
+
+  <script>
+    function geoFindMe() {
+        const status = document.querySelector("#status");
+
+        function success(position) {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+
+          const location = [{ Time: Date.now(), Latitude: latitude, Longitude: longitude }]
+
+          function loadTableData(items) {
+            const table = document.getElementById("coordsRecordBody");
+            items.forEach(item => {
+              let row = table.insertRow();
+              let Time = row.insertCell(0);
+              Time.innerHTML = item.Time;
+              let Latitude = row.insertCell(1);
+              Latitude.innerHTML = item.Latitude;
+              let Longitude = row.insertCell(2);
+              Longitude.innerHTML = item.Longitude;
+            });
+          }
+          loadTableData(location);
+        }
+
+        function error() {
+          status.textContent = "Unable to retrieve your location";
+        }
+
+        if (!navigator.geolocation) {
+          status.textContent = "Geolocation is not supported by your browser";
+        } else {
+          status.textContent = "Status: Recording…";
+          navigator.geolocation.watchPosition(success, error);
+        }
+      }
+    geoFindMe();
+  </script>
+</body>
+
+</html>
